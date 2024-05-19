@@ -1,16 +1,15 @@
 -- Add up migration script here
 
 CREATE TABLE IF NOT EXISTS questions (
-    question_uuid CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    question_uuid uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     title VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS answers (
-    answer_uuid CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-    question_uuid CHAR(36) NOT NULL,
+    answer_uuid uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    question_uuid uuid NOT NULL REFERENCES questions (question_uuid) ON DELETE CASCADE,
     content VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (question_uuid) REFERENCES questions (question_uuid) ON DELETE CASCADE
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

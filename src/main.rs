@@ -4,12 +4,12 @@ use axum::{
 };
 use dotenvy::dotenv;
 use handlers::*;
-use log::info;
-use sqlx::mysql::MySqlPoolOptions;
+use sqlx::postgres::PgPoolOptions;
 use tokio::net::TcpListener;
 
 mod handlers;
 mod models;
+mod persistance;
 
 #[tokio::main]
 async fn main() {
@@ -18,19 +18,11 @@ async fn main() {
 
     let database_url = dotenvy::var("DATABASE_URL").expect("DATABASE_URL not set");
 
-    let pool = MySqlPoolOptions::new()
+    let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect(&database_url)
         .await
         .expect("Connot connect to Database");
-
-    let recs = sqlx::query!(r#"select * from questions"#)
-        .fetch_all(&pool)
-        .await
-        .unwrap();
-
-    info!("********* Question Records ********");
-    info!("{:?}", recs);
 
     let app = Router::new()
         .route("/question", post(create_question))
