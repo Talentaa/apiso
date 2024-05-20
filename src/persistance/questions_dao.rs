@@ -1,8 +1,10 @@
+use axum::async_trait;
 use sqlx::PgPool;
 use uuid::Uuid;
 
 use crate::models::{DBError, Question, QuestionDetail};
 
+#[async_trait]
 pub trait QuestionsDao {
     async fn create_question(&self, question: Question) -> Result<QuestionDetail, DBError>;
     async fn delete_question(&self, question_uuid: Uuid) -> Result<(), DBError>;
@@ -19,6 +21,7 @@ impl QuestionsDaoImpl {
     }
 }
 
+#[async_trait]
 impl QuestionsDao for QuestionsDaoImpl {
     async fn create_question(&self, question: Question) -> Result<QuestionDetail, DBError> {
         let record = sqlx::query!(

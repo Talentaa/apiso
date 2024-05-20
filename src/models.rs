@@ -10,7 +10,7 @@ pub struct Question {
 }
 
 #[serde_with::serde_as]
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct QuestionDetail {
     pub question_uuid: Uuid,
     pub title: String,
@@ -31,7 +31,7 @@ pub struct Answer {
 }
 
 #[serde_with::serde_as]
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone)]
 pub struct AnswerDetail {
     pub answer_uuid: Uuid,
     pub question_uuid: Uuid,
@@ -47,6 +47,8 @@ pub struct AnswerId {
 
 #[derive(Error, Debug)]
 pub enum DBError {
+    #[error("Invalid UUID provided: {0}")]
+    InvalidUUID(String),
     #[error("Database error occurred")]
     Other(#[from] Box<dyn std::error::Error + Send + Sync>),
 }
