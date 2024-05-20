@@ -50,7 +50,7 @@ async fn main() {
         .route("/questions", get(read_questions))
         .route("/answer", post(create_answer))
         .route("/answer", delete(delete_answer))
-        .route("/answers", get(read_answers))
+        .route("/answers", post(read_answers))
         .with_state(app_state);
 
     let listener = TcpListener::bind("127.0.0.1:8000").await.unwrap();

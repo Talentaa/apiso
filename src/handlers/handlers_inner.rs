@@ -88,6 +88,7 @@ pub async fn read_answers(
     let answers = answers_dao.get_answers(question_uuid.question_uuid).await;
 
     match answers {
+        
         Ok(answers) => Ok(answers),
         Err(e) => {
             error!("{:?}", e);
